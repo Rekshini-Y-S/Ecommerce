@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Signup{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper d-flex align-items-center justify-content-center">
+    <div class="card auth-card hero-panel">
+        <div class="card-body p-4 p-md-5">
+            <p class="eyebrow mb-2">Seller Access</p>
+            <h2 class="fw-bold mb-2">Create your analytics workspace</h2>
+            <p class="text-muted mb-4">Sign up to manage products, generate an API key, and review business performance from one Django dashboard.</p>
+
+            {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Create Account</button>
+            </form>
+
+            <p class="text-center text-muted mt-4 mb-0">
+                Already have an account?
+                <a href="{% url 'seller_login' %}" class="fw-semibold text-decoration-none">Login</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

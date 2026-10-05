@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="card hero-panel mb-4 overflow-hidden">
+    <div class="card-body p-4 p-lg-5">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <p class="eyebrow mb-2">Business Analytics</p>
+                <h1 class="display-6 fw-bold mb-2">Seller dashboard for revenue, inventory, and customer insights</h1>
+                <p class="text-muted mb-0">Everything here is seller-specific. The dashboard and the `/seller/api/analytics/` endpoint both read from the same SQLite-backed Django data model.</p>
+            </div>
+            <div class="col-lg-4">
+                <div class="d-grid gap-2">
+                    <form method="post" action="{% url 'seller_generate_api_key' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary w-100">Generate API Key</button>
+                    </form>
+                    <a href="{% url 'seller_login' %}" class="btn btn-outline-primary w-100">Seller Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-6 col-xl-3">
+        <div class="card metric-card metric-sales h-100">
+            <div class="card-body">
+                <p class="text-uppercase small mb-2">Total Sales</p>
+                <h2 class="fw-bold mb-0">Rs. {{ analytics.total_sales|floatformat:2 }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card metric-card metric-orders h-100">
+            <div class="card-body">
+                <p class="text-uppercase small mb-2">Total Orders</p>
+                <h2 class="fw-bold mb-0">{{ analytics.total_orders }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card metric-card metric-products h-100">
+            <div class="card-body">
+                <p class="text-uppercase small mb-2">Total Products</p>
+                <h2 class="fw-bold mb-0">{{ analytics.total_products }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card metric-card metric-customers h-100">
+            <div class="card-body">
+                <p class="text-uppercase small mb-2">Total Customers</p>
+                <h2 class="fw-bold mb-0">{{ analytics.total_customers }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="card-title mb-1">Monthly Sales</h5>
+                        <p class="text-muted small mb-0">Chart.js trend line showing how your order revenue changes month to month.</p>
+                    </div>
+                </div>
+                <div style="height: 320px;">
+                    <canvas id="salesChart"></canvas>
+                </div>
+                {% if chart_labels == "[]" %}
+                    <p class="text-muted mt-3 mb-0">No orders yet. Add products and place orders to populate the chart.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Current API Key</h5>
+                {% if api_key %}
+                    <p class="mono bg-light p-3 rounded border mb-2">{{ api_key.key }}</p>
+                    <p class="text-muted small mb-0">Use this in the <code>Authorization: Api-Key &lt;key&gt;</code> header for server-to-server analytics access.</p>
+                {% else %}
+                    <p class="text-muted mb-0">No API key generated yet. Click the button above to create one.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Analytics API</h5>
+                <p class="text-muted small">Endpoint: <code>{% url 'seller_analytics_api' %}</code></p>
+                <p class="text-muted small mb-2">Run this exact format in terminal:</p>
+                <pre class="bg-dark text-light rounded p-3 mb-0"><code>curl -H "Authorization: Api-Key {{ api_key.key|default:'YOUR_API_KEY' }}" http://127.0.0.1:8000{% url 'seller_analytics_api' %}</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-1">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Top Products</h5>
+                {% if top_products %}
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Category</th>
+                                    <th class="text-end">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in top_products %}
+                                    <tr>
+                                        <td>{{ product.name }}</td>
+                                        <td>{{ product.category }}</td>
+                                        <td class="text-end">Rs. {{ product.price|floatformat:2 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">No seller products available yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Recent Orders</h5>
+                {% if recent_orders %}
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th class="text-end">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in recent_orders %}
+                                    <tr>
+                                        <td>#{{ order.id }}</td>
+                                        <td>{{ order.created_at|date:"M d, Y" }}</td>
+                                        <td class="text-end">Rs. {{ order.total_amount|floatformat:2 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">No orders have been recorded yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'vendor/chartjs/chart.umd.min.js' %}"></script>
+<script>
+    const labels = {{ chart_labels|safe }};
+    const values = {{ chart_values|safe }};
+    const ctx = document.getElementById("salesChart");
+
+    if (ctx && window.Chart) {
+        new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Monthly Sales",
+                    data: values,
+                    borderColor: "#12355b",
+                    backgroundColor: "rgba(18, 53, 91, 0.14)",
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.35
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}
