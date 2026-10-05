@@ -1,158 +1,190 @@
-Ecommerce
-# Green Fashion
+#Ecommerce
+##🌱 Green Fashion
 
-## Project Overview
+Green Fashion is a Django-based e-commerce web application designed to promote sustainable and ethical fashion. The platform allows buyers to explore products with sustainability and ethical ratings, manage their shopping cart, and place orders, while sellers can manage products and view business analytics through a dedicated dashboard and API.
 
-Green Fashion is a web-based fashion marketplace built with Django. It helps shoppers discover products with sustainability and ethical ratings, while giving sellers a separate portal to view store activity and sales analytics.
+##🎯 Project Objective
 
-The application supports two types of users:
+The main objective of this project is to build an e-commerce platform that combines online fashion shopping with sustainability insights, helping users make more informed purchasing decisions based on product sustainability and ethical ratings.
 
-- **Buyers** can browse and search products, explore recommendations, manage a shopping cart, and place orders.
-- **Sellers** can sign in to a dashboard, review store metrics, and use an API key to access analytics.
+##✨ Key Features
 
-The project also includes green-fashion datasets, a Jupyter notebook, and a saved CNN-LSTM model as research assets. The Django storefront currently uses its database-backed product and recommendation views; it does not load the saved model during normal website requests.
+- Browse, search, and explore fashion products.
+- View sustainability and ethical ratings for products.
+- Category-based product recommendations.
+- Separate Buyer and Seller registration and login portals.
+- Add, review, and remove products from the shopping cart.
+- Place and manage orders through the application.
+- Upload product images or use images from external URLs.
+- Seller dashboard with business and sales metrics.
+- Seller analytics API secured with an API key.
+- Green-fashion dataset and machine-learning resources included in the project.
+- CNN-LSTM model artifact and Jupyter notebook included for experimentation.
 
-## Table of Contents
+«Note: Checkout currently records orders within the application and does not integrate with an external payment gateway.»
 
-- [Project Overview](#project-overview)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [Main Routes](#main-routes)
-- [Seller Analytics API](#seller-analytics-api)
-- [Tests](#tests)
-- [Project Structure](#project-structure)
-- [Security and Deployment](#security-and-deployment)
+##🛠️ Technologies Used
 
-## Features
+Technology| Purpose
+Python| Application development
+Django 5.2| Web application framework
+SQLite| Database
+HTML & CSS| User interface
+JavaScript| Client-side functionality
+Pillow| Image upload and processing
+Jupyter Notebook| Data analysis and experimentation
+CNN-LSTM| Machine-learning model artifact
 
-- Browse and search the product catalog, with product details and category-based recommendations.
-- View sustainability and ethical scores alongside product information.
-- Create separate buyer and seller accounts and sign in through the corresponding portals.
-- Add products to a buyer cart, review or remove cart items, and place orders.
-- Upload product images or display images from an external URL.
-- View seller dashboard metrics and retrieve analytics using a seller API key.
-- Explore the included green-fashion dataset, Jupyter notebook, and CNN-LSTM model artifact.
+##📊 Analytics & Machine Learning
 
-> Checkout currently records orders in the application; it does not integrate with an external payment provider.
+The project includes a green-fashion dataset and a Jupyter notebook for data analysis and experimentation.
 
-## Tech Stack
+The seller analytics API provides business metrics such as:
 
-- Python
-- Django 5.2
-- SQLite
-- HTML, CSS, and JavaScript
-- Pillow for uploaded image support
+- Sales
+- Orders
+- Products
+- Customers
 
-## Getting started
+The project also contains a CNN-LSTM model artifact related to the machine-learning component.
 
-### Requirements
+«The current Django storefront does not load the saved CNN-LSTM model during its normal request flow. The notebook can be executed separately for machine-learning experimentation.»
 
-- Python 3.10 or newer
-- `pip`
+##🔌 Seller Analytics API
 
-### Install and run
+Authenticated sellers can generate an API key from the seller dashboard and use it to access seller-specific analytics.
 
-1. Clone the repository and open its directory:
+Example Request
 
-   ```bash
-   git clone <repository-url>
-   cd Ecommerce
-   ```
-
-2. Create and activate a virtual environment:
-
-   ```bash
-   python -m venv .venv
-   ```
-
-   On Windows PowerShell:
-
-   ```powershell
-   .\.venv\Scripts\Activate.ps1
-   ```
-
-   On macOS or Linux:
-
-   ```bash
-   source .venv/bin/activate
-   ```
-
-3. Install the application dependencies:
-
-   ```bash
-   python -m pip install "Django>=5.2,<6.0" Pillow
-   ```
-
-4. Apply database migrations:
-
-   ```bash
-   python manage.py migrate
-   ```
-
-5. (Optional) Create an administrator account to manage products in Django admin:
-
-   ```bash
-   python manage.py createsuperuser
-   ```
-
-6. Start the development server:
-
-   ```bash
-   python manage.py runserver
-   ```
-
-Open <http://127.0.0.1:8000/> to visit the storefront. The Django admin is available at <http://127.0.0.1:8000/admin/>.
-
-## Main routes
-
-| Route | Purpose |
-| --- | --- |
-| `/` | Storefront |
-| `/products/` | Product catalog |
-| `/search/` | Search products |
-| `/signup/`, `/login/` | Buyer registration and sign-in |
-| `/cart/` | Buyer shopping cart |
-| `/checkout/` | Checkout |
-| `/seller/signup/`, `/seller/login/` | Seller registration and sign-in |
-| `/seller/dashboard/` | Seller dashboard |
-| `/seller/api/analytics/` | Seller analytics API (requires an API key) |
-| `/admin/` | Django administration |
-
-## Seller analytics API
-
-Authenticated sellers can generate or regenerate an API key from the seller dashboard. Send the key in the `Authorization` header when requesting the analytics endpoint:
-
-```http
 GET /seller/api/analytics/
 Authorization: Api-Key <your-api-key>
-```
 
-The endpoint returns JSON metrics for the seller, including sales, orders, products, and customers.
+The API returns JSON-based analytics for the authenticated seller.
 
-## Tests
+##🖥️ Application Modules
+
+###👤 Buyer Module
+
+- Registration and login
+- Product browsing and search
+- Product details
+- Cart management
+- Checkout and order placement
+
+###🏪 Seller Module
+
+- Seller registration and login
+- Product management
+- Seller dashboard
+- Sales and business metrics
+- API key generation
+- Analytics API
+
+###📈 Analytics & ML Module
+
+- Green-fashion dataset
+- Data analysis notebook
+- Seller analytics API
+- CNN-LSTM model artifact
+
+##🚀 Getting Started
+
+###Requirements
+
+- Python 3.10 or newer
+- "pip"
+
+1. Clone the Repository
+
+git clone <repository-url>
+cd Ecommerce
+
+2. Create a Virtual Environment
+
+python -m venv .venv
+
+3. Activate the Virtual Environment
+
+Windows PowerShell:
+
+.\.venv\Scripts\Activate.ps1
+
+macOS / Linux:
+
+source .venv/bin/activate
+
+4. Install Dependencies
+
+python -m pip install "Django>=5.2,<6.0" Pillow
+
+5. Apply Database Migrations
+
+python manage.py migrate
+
+6. Create an Administrator Account
+
+Optional:
+
+python manage.py createsuperuser
+
+7. Run the Development Server
+
+python manage.py runserver
+
+Open:
+
+"http://127.0.0.1:8000/"
+
+Django Admin:
+
+"http://127.0.0.1:8000/admin/"
+
+##🧭 Main Routes
+
+Route| Purpose
+"/"| Storefront
+"/products/"| Product catalog
+"/search/"| Product search
+"/signup/"| Buyer registration
+"/login/"| Buyer login
+"/cart/"| Shopping cart
+"/checkout/"| Checkout
+"/seller/signup/"| Seller registration
+"/seller/login/"| Seller login
+"/seller/dashboard/"| Seller dashboard
+"/seller/api/analytics/"| Seller analytics API
+"/admin/"| Django administration
+
+##📁 Project Structure
+
+.
+├── Ecommerce/          # Django project settings and URL configuration
+├── website/            # Storefront, seller features, models, templates and static files
+├── dataset/             # Green-fashion dataset, notebook and ML model
+├── media/               # Uploaded media
+├── product_images/      # Product image assets
+├── db.sqlite3           # Local SQLite database
+└── manage.py            # Django management script
+
+##🧪 Testing
 
 Run the Django test suite with:
 
-```bash
 python manage.py test
-```
 
-## Project structure
+##🔐 Security & Deployment
 
-```text
-.
-├── Ecommerce/     # Django project settings and root URL configuration
-├── website/       # Storefront, seller features, models, templates, and static files
-├── dataset/       # Green-fashion CSV files, notebook, and saved model
-├── media/         # Uploaded media
-├── product_images/# Product image assets
-├── db.sqlite3     # Local SQLite database
-└── manage.py
-```
+The included Django settings are intended for local development.
 
-Running the notebook separately may require additional packages such as Jupyter, pandas, NumPy, scikit-learn, and TensorFlow.
+Before deploying to production:
 
-## Security and deployment
+- Store "SECRET_KEY" securely using environment variables.
+- Set "DEBUG=False".
+- Configure "ALLOWED_HOSTS".
+- Use a production-ready database.
+- Configure static and media file handling.
+- Never publish real credentials, private uploads, or sensitive data.
 
-The checked-in Django settings are intended for local development. Before deploying, configure a new `SECRET_KEY` through an environment variable, set `DEBUG=False`, configure `ALLOWED_HOSTS`, and use an appropriate production database and static/media-file setup. Do not publish or reuse real secrets, local databases, or private uploads.
+
+
+
